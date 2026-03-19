@@ -2,53 +2,50 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FATBOK TV | Next-Gen Experience</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FATBOK TV | Next-Gen Streaming</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
-<body class="aurora-bg">
+<body class="nebula-bg">
 
-    <div class="top-overlay">
-        <div class="brand">
-            <div class="neon-dot"></div>
-            FATBOK<span>TV</span>
-        </div>
-        <div class="active-info">
-            <span id="current-channel-title">Sinyal Bekleniyor...</span>
-            <div class="live-tag">LIVE</div>
-        </div>
-        <div class="top-actions">
-            <button onclick="toggleCinemaMode()" id="cinema-btn" title="Sinema Modu">🎥</button>
-        </div>
-    </div>
+    <div class="bg-glow"></div>
 
-    <main class="theater-stage">
-        <div id="players" class="dynamic-grid">
-            <div class="empty-state">
-                <div class="loader-ring"></div>
-                <p>YAYIN BAŞLATMAK İÇİN ALT MENÜDEN SEÇİM YAPIN</p>
+    <nav class="glass-nav">
+        <div class="brand">FATBOK<span>TV</span></div>
+        <div class="nav-center">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Kanal, lig veya takım ara...">
+            </div>
+        </div>
+        <div class="nav-right">
+            <div id="clock">00:00</div>
+            <button onclick="toggleCinemaMode()" class="icon-btn">✧</button>
+        </div>
+    </nav>
+
+    <main class="viewport">
+        <div id="players" class="video-canvas">
+            <div class="hero-placeholder">
+                <h1>HİÇBİR ANI KAÇIRMA</h1>
+                <p>Başlamak için aşağıdan bir kanal seçin</p>
             </div>
         </div>
     </main>
 
-    <div class="bottom-dock">
-        <div class="dock-header">
-            <div class="search-wrapper">
-                <input type="text" id="search" placeholder="Kanal veya lig ara..." autocomplete="off">
+    <footer class="dock-container">
+        <div class="dock-blur">
+            <div class="layout-controls">
+                <button onclick="setLayout(1)" title="Tekli">1</button>
+                <button onclick="setLayout(2)" title="Düello">2</button>
+                <button onclick="setLayout(4)" title="Dörtlü">4</button>
             </div>
-            <div class="layout-selector">
-                <button onclick="setLayout(1)" class="l-btn">1</button>
-                <button onclick="setLayout(2)" class="l-btn">2</button>
-                <button onclick="setLayout(4)" class="l-btn">4</button>
-            </div>
+            <div class="divider"></div>
+            <div id="channels" class="channel-track">
+                </div>
         </div>
-
-        <div id="channels" class="horizontal-scroll">
-            </div>
-    </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
