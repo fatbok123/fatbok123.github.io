@@ -1,279 +1,87 @@
-/* FATBOK TV - Professional Streaming UI 
-    Theme: Deep Space Neon
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-
 :root {
-    /* Color Palette */
-    --bg-main: #02040a;
-    --bg-card: rgba(13, 17, 23, 0.4);
     --accent: #00f2ff;
-    --accent-glow: rgba(0, 242, 255, 0.25);
-    --secondary: #7000ff;
-    
-    /* Text Colors */
-    --text-white: #ffffff;
-    --text-muted: rgba(255, 255, 255, 0.6);
-    
-    /* Glassmorphism & Borders */
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --blur: blur(16px);
-    
-    /* Transitions */
-    --smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --glass: rgba(255, 255, 255, 0.03);
+    --glass-heavy: rgba(10, 10, 15, 0.8);
+    --border: rgba(255, 255, 255, 0.1);
+    --font: 'Outfit', sans-serif;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-}
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
 body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--bg-main);
-    background-image: 
-        radial-gradient(circle at 10% 10%, rgba(112, 0, 255, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(0, 242, 255, 0.05) 0%, transparent 40%);
-    color: var(--text-white);
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    overflow: hidden;
+    margin: 0; font-family: var(--font); background: #020308;
+    color: white; height: 100vh; overflow: hidden;
 }
 
-/* --- SIDEBAR: MODERN DOCK --- */
-.sidebar {
-    width: 300px;
-    background: var(--bg-card);
-    backdrop-filter: var(--blur);
-    border-right: 1px solid var(--glass-border);
-    display: flex;
-    flex-direction: column;
-    transition: var(--smooth);
-    z-index: 1000;
+/* Dinamik Arka Plan Parlaması */
+.bg-glow {
+    position: fixed; top: 50%; left: 50%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.07) 0%, transparent 70%);
+    transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
 }
 
-.sidebar.collapsed {
-    transform: translateX(-100%);
-    width: 0;
+/* Üst Navigasyon */
+.glass-nav {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    width: 95%; display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 30px; background: var(--glass); backdrop-filter: blur(20px);
+    border: 1px solid var(--border); border-radius: 20px; z-index: 1000;
 }
 
-.header {
-    padding: 40px 25px 20px;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -1.5px;
-    text-transform: uppercase;
-}
+.brand { font-size: 22px; font-weight: 800; letter-spacing: -1px; }
+.brand span { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
 
-.header span {
-    color: var(--accent);
-    text-shadow: 0 0 20px var(--accent-glow);
-}
-
-/* --- SEARCH BAR --- */
-.search-container { padding: 0 20px 20px; }
 #search {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 14px 20px;
-    color: #fff;
-    outline: none;
-    transition: var(--smooth);
+    background: rgba(255,255,255,0.05); border: none; padding: 10px 25px;
+    border-radius: 12px; color: white; width: 350px; outline: none;
+    border: 1px solid transparent; transition: 0.3s;
 }
-#search:focus {
-    border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+#search:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+
+/* Video Alanı */
+.viewport { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 40px 160px; }
+.video-canvas { width: 100%; height: 100%; display: grid; gap: 20px; transition: 0.5s cubic-bezier(0.2, 0, 0.2, 1); }
+
+.modern-player {
+    background: #000; border-radius: 30px; position: relative; overflow: hidden;
+    border: 2px solid var(--border); transition: 0.4s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.modern-player.active { border-color: var(--accent); transform: scale(1.01); box-shadow: 0 0 40px rgba(0, 242, 255, 0.2); }
+
+video { width: 100%; height: 100%; object-fit: cover; }
+
+/* Alt Kanal Dock'u */
+.dock-container {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    width: auto; max-width: 90%; z-index: 1000;
 }
 
-/* --- CHANNELS: INTERACTIVE CARDS --- */
-#channels {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px;
-    scrollbar-width: none;
+.dock-blur {
+    background: var(--glass-heavy); backdrop-filter: blur(30px);
+    padding: 15px 30px; border-radius: 35px; border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
-.channel {
-    padding: 14px 18px;
-    margin-bottom: 8px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-    transition: var(--smooth);
-    border: 1px solid transparent;
-}
+.channel-track { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; }
+.channel-track::-webkit-scrollbar { display: none; }
 
-.channel:hover {
-    background: rgba(255, 255, 255, 0.05);
-    transform: scale(1.02);
+.chan-item {
+    min-width: 60px; height: 60px; background: rgba(255,255,255,0.05);
+    border-radius: 18px; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: 0.3s; border: 1px solid transparent;
 }
+.chan-item:hover { transform: translateY(-10px) scale(1.1); background: rgba(255,255,255,0.1); border-color: var(--accent); }
+.chan-item img { width: 70%; height: 70%; object-fit: contain; }
 
-.channel.selected-chan {
-    background: linear-gradient(90deg, rgba(0, 242, 255, 0.1) 0%, transparent 100%);
-    border-color: rgba(0, 242, 255, 0.3);
+/* Layout Butonları */
+.layout-controls button {
+    background: transparent; border: 1px solid var(--border); color: white;
+    width: 40px; height: 40px; border-radius: 12px; cursor: pointer; margin-right: 5px;
+    transition: 0.3s; font-weight: 600;
 }
+.layout-controls button:hover { background: var(--accent); color: black; border-color: var(--accent); }
 
-.channel-logo {
-    width: 45px;
-    height: 45px;
-    background: #0d1117;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.channel-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-muted);
-}
-
-.selected-chan .channel-name {
-    color: var(--accent);
-    font-weight: 600;
-}
-
-/* --- MAIN CONTENT: THEATER AREA --- */
-.main-content {
-    flex: 1;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.layout-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.channel-title-main {
-    font-size: 20px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.live-indicator {
-    background: #ff004c;
-    color: white;
-    font-size: 9px;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 1px;
-    animation: pulse 2s infinite;
-}
-
-/* --- PLAYER GRID: CINEMATIC --- */
-#players {
-    display: grid;
-    gap: 25px;
-    flex: 1;
-}
-
-.player-box {
-    background: #000;
-    border-radius: 32px;
-    border: 1px solid var(--glass-border);
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    transition: var(--smooth);
-}
-
-.player-box.active {
-    border-color: var(--accent);
-    box-shadow: 0 0 40px rgba(0, 242, 255, 0.15);
-}
-
-.player-box:hover {
-    transform: translateY(-5px);
-}
-
-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 32px;
-}
-
-/* --- BUTTONS: NEON STYLE --- */
-.layout-buttons button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--smooth);
-    margin-left: 10px;
-}
-
-.layout-buttons button:hover {
-    background: var(--accent);
-    color: var(--bg-main);
-    box-shadow: 0 0 20px var(--accent-glow);
-}
-
-/* --- TOGGLE BUTTON --- */
-.toggle-btn {
-    position: absolute;
-    left: 20px;
-    top: 30px;
-    width: 45px;
-    height: 45px;
-    background: var(--bg-card);
-    backdrop-filter: var(--blur);
-    border: 1px solid var(--glass-border);
-    border-radius: 14px;
-    color: #fff;
-    cursor: pointer;
-    z-index: 1010;
-    transition: var(--smooth);
-}
-
-.toggle-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-}
-
-/* --- ANIMATIONS --- */
-@keyframes pulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-.fade-in {
-    animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* --- MOBILE OPTIMIZATION --- */
-@media (max-width: 900px) {
-    .sidebar { position: fixed; height: 100%; left: 0; }
-    .main-content { padding: 20px; padding-top: 80px; }
-    .player-box { border-radius: 20px; }
-    video { border-radius: 20px; }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.6s ease forwards; }
