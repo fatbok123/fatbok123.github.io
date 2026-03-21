@@ -221,50 +221,57 @@ function selectPlayer(index) {
 }
 
 
-
-// YAYINI OYNATMA (GÜNCELLENDİ)
-
+// YAYINI OYNATMA (HİBRİT DESTEKLİ - BOZULMADI)
 function playStream(url, name = "Bilinmeyen Kanal") {
-
     if (players.length === 0) {
-
         createPlayers(1);
-
     }
-
-
 
     const video = players[activePlayer];
+    const playerBox = video.parentElement;
+    
+    // Eski iframe varsa temizle
+    const oldIframe = playerBox.querySelector("iframe");
+    if (oldIframe) oldIframe.remove();
 
     if (playerInfos[activePlayer]) playerInfos[activePlayer].innerText = name;
-
     
-
     if (hlsInstances[activePlayer]) hlsInstances[activePlayer].destroy();
 
-    
-
-    if (Hls.isSupported()) {
-
-        const hls = new Hls();
-
-        hls.loadSource(url);
-
-        hls.attachMedia(video);
-
-        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-
-        hlsInstances[activePlayer] = hls;
-
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-
-        video.src = url;
-
-        video.play();
-
+    // --- EMBED LİNKİ KONTROLÜ ---
+    if (url.includes("embedsports.top") || !url.includes(".m3u8")) {
+        video.style.display = "none"; // Video tagini gizle
+        const iframe = document.createElement("iframe");
+        iframe.src = url;
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "none";
+        iframe.allow = "autoplay; encrypted-media; fullscreen";
+        iframe.allowFullscreen = true;
+        playerBox.appendChild(iframe);
+        return;
     }
 
+    // --- NORMAL HLS AKIŞI ---
+    video.style.display = "block";
+    
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        hlsInstances[activePlayer] = hls;
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.play();
+    }
 }
+
+function setLayout(count) { 
+    activePlayer = 0; 
+    createPlayers(count); 
+}
+
 
 
 
